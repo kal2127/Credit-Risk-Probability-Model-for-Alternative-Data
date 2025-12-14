@@ -1,5 +1,33 @@
 # Credit-Risk-Probability-Model-for-Alternative-Data
 
+# Credit Risk Probability Model for Alternative Data
+
+## 🎯 Project Goal
+
+The objective of this project is to build a highly interpretable credit scorecard model for Bati Bank by leveraging alternative transactional data (Xente data) to assess customer risk. The model utilizes the Weight of Evidence (WoE) transformation to create a stable, regulatory-compliant Logistic Regression model.
+
+## 📁 Project Structure
+
+- `data/`: Contains the raw transactional data (`data.csv`) and the intermediate feature files.
+- `notebooks/`: Contains the Python scripts and Jupyter notebooks for analysis and model training.
+  - `feature_engineering.py`: Script to calculate RFMS features and define the Default Proxy.
+  - `woe_iv_transformation.py`: Script to transform features using WoE/IV.
+  - `model_building.py`: Script to train the Logistic Regression model and calibrate the scorecard.
+  - `EDA_Feature_Engineering.ipynb`: **Missing EDA deliverable (to be completed).**
+- `models/`: Stores the model artifacts required for deployment (e.g., WoE lookup tables, scorecard coefficients).
+
+## 🚀 Setup and Run Instructions
+
+### Prerequisites
+
+1.  Python 3.8+
+2.  Git
+
+### Step 1: Clone the Repository
+
+```bash
+git clone [Insert your project repository URL here]
+cd credit_risk_project
 Credit Scoring Business Understanding
 1. Basel II Accord and Model Interpretability
 
@@ -24,3 +52,4 @@ Simple models such as Logistic Regression with Weight of Evidence (WoE) are wide
 More complex models such as Gradient Boosting often achieve higher predictive performance by capturing complex relationships in the data. Despite their accuracy, they are harder to interpret and are often considered “black-box” models. This lack of transparency makes regulatory approval more challenging unless additional explainability tools are applied.
 
 As a result, simpler and more interpretable models are typically preferred for deployment in regulated banking environments, while complex models are often used for benchmarking or as supporting models.
+```
