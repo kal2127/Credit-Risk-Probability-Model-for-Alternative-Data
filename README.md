@@ -1,55 +1,95 @@
-# Credit-Risk-Probability-Model-for-Alternative-Data
+Credit Risk Probability Model for Alternative Data
 
-# Credit Risk Probability Model for Alternative Data
+I. Project Overview and Context
+This project develops a stable, regulatory-compliant credit scorecard model for Bati Bank. It leverages alternative transactional data from the Xente platform to assess customer risk for a new Buy-Now-Pay-Later (BNPL) service.
 
-## 🎯 Project Goal
+🎯 Project Goal
+The primary objective is to build a highly interpretable credit scorecard using Logistic Regression based on Weight of Evidence (WoE) transformed features, ensuring the model meets high standards for stability, performance, and auditability.
 
-The objective of this project is to build a highly interpretable credit scorecard model for Bati Bank by leveraging alternative transactional data (Xente data) to assess customer risk. The model utilizes the Weight of Evidence (WoE) transformation to create a stable, regulatory-compliant Logistic Regression model.
+A. Business Understanding and Regulatory Context
 
-## 📁 Project Structure
+1. Basel II Accord and Model Interpretability
+   The use of this model for lending decisions requires strict adherence to the Basel II Accord. This mandates that the model must be transparent and auditable.
 
-- `data/`: Contains the raw transactional data (`data.csv`) and the intermediate feature files.
-- `notebooks/`: Contains the Python scripts and Jupyter notebooks for analysis and model training.
-  - `feature_engineering.py`: Script to calculate RFMS features and define the Default Proxy.
-  - `woe_iv_transformation.py`: Script to transform features using WoE/IV.
-  - `model_building.py`: Script to train the Logistic Regression model and calibrate the scorecard.
-  - `EDA_Feature_Engineering.ipynb`: **Missing EDA deliverable (to be completed).**
-- `models/`: Stores the model artifacts required for deployment (e.g., WoE lookup tables, scorecard coefficients).
+Requirement: We use Logistic Regression and WoE transformation because they provide easily explainable outputs (scorecard points) that satisfy regulatory demands for transparency.
 
-## 🚀 Setup and Run Instructions
+Purpose: Allows regulators and auditors to clearly understand how risk is calculated and enables clear explanation of credit decisions to customers.
 
-### Prerequisites
+2. Proxy Variable and Associated Business Risks
+   Since historical loan performance data is unavailable for this new service, a Default Proxy is created based on customer transaction behavior (RFMS patterns).
 
-1.  Python 3.8+
-2.  Git
+Limitation: The proxy is a substitute for a true default label, carrying inherent risks:
 
-### Step 1: Clone the Repository
+Inaccuracy: The proxy may not perfectly reflect actual credit risk.
 
-```bash
+Bias: Behavioral data may unintentionally capture bias, raising fairness concerns.
+
+3. Trade-offs: Simple vs. Complex Models
+   In a regulated financial environment, the WoE Logistic Regression model (Simple) is chosen over "black-box" alternatives (Complex) because interpretability is prioritized over marginal predictive gains, satisfying regulatory requirements.
+
+II. Technical Setup
+📁 Project Structure
+The repository follows a standard layout, separating source code from analysis and configuration.
+
+data/: Contains the raw transactional data (data.csv). (Excluded from Git by .gitignore)
+
+src/: Contains the executable Python scripts for the entire pipeline.
+
+feature_engineering.py: Calculates RFMS features.
+
+woe_iv_transformation.py: Transforms features using WoE/IV.
+
+model_building.py: Trains the final Logistic Regression model.
+
+notebooks/: Contains the Jupyter Notebooks for analysis and documentation.
+
+EDA_Feature_Engineering.ipynb: The required EDA deliverable.
+
+models/: Stores the final model artifacts (WoE lookup tables, scorecard coefficients).
+
+tests/: Contains unit tests for key pipeline functions.
+
+Prerequisites
+Python 3.8+
+
+Git
+
+Step 1: Clone the Repository
+Bash
+
 git clone [Insert your project repository URL here]
 cd credit_risk_project
-Credit Scoring Business Understanding
-1. Basel II Accord and Model Interpretability
+Step 2: Set up Environment and Dependencies
+A virtual environment is required. All necessary packages are listed in requirements.txt.
 
-The Basel II Accord requires banks to carefully measure and manage credit risk, especially when using internal models to make lending decisions. Because these models directly affect regulatory capital and customer outcomes, they must be transparent, interpretable, and well documented.
+Bash
 
-An interpretable model allows regulators, auditors, and internal risk teams to clearly understand how risk is calculated and to verify that the model is working as intended. It also enables the bank to explain credit decisions to customers in a clear and fair way. For these reasons, Basel II strongly encourages the use of models that can be easily validated, audited, and justified rather than complex models that cannot be clearly explained.
+# Set up virtual environment (Linux/macOS example)
 
-2. Proxy Variable and Its Business Risks
+python3 -m venv venv
+source venv/bin/activate
 
-This project uses alternative data from an eCommerce platform, which does not include a direct indicator of loan default (such as missed or late repayments). Since customers are applying for a new Buy-Now-Pay-Later service, there is no historical loan performance data available.
+# Install dependencies
 
-To address this limitation, a proxy target variable is created using customer transaction behavior, such as Recency, Frequency, and Monetary (RFM) patterns. These behavioral indicators serve as a substitute for a true default label and allow the model to estimate customer risk.
+pip install -r requirements.txt
+III. Pipeline Execution
+The pipeline must be executed sequentially from the project root directory (credit_risk_project/). All scripts utilize Python's logging module for production monitoring and debugging.
 
-However, using a proxy variable introduces important business risks. The proxy may not perfectly represent actual credit risk, which can lead to rejecting creditworthy customers or approving risky ones. Additionally, behavioral data may unintentionally capture bias, raising fairness and regulatory concerns. Finally, a proxy designed for one eCommerce platform may not generalize well to other financial products or lending contexts.
+Step 1: Feature Engineering (Task 2.A)
+Aggregates transactional data into RFMS features and defines the Default Proxy.
 
-3. Trade-offs Between Simple and Complex Models
+Bash
 
-In a regulated financial environment, there is a trade-off between model interpretability and predictive performance.
+python src/feature_engineering.py
+Step 2: WoE/IV Transformation (Task 2.B)
+Bins the features, calculates WoE/IV, and transforms the data for Logistic Regression.
 
-Simple models such as Logistic Regression with Weight of Evidence (WoE) are widely used in credit scoring because they are easy to understand and explain. Their outputs can be directly interpreted, making them suitable for regulatory review and customer communication. However, these models may have lower predictive accuracy when dealing with complex, non-linear patterns in transactional data.
+Bash
 
-More complex models such as Gradient Boosting often achieve higher predictive performance by capturing complex relationships in the data. Despite their accuracy, they are harder to interpret and are often considered “black-box” models. This lack of transparency makes regulatory approval more challenging unless additional explainability tools are applied.
+python src/woe_iv_transformation.py
+Step 3: Model Building and Evaluation (Task 3)
+Trains the model, calculates AUC/GINI/KS, calibrates the final credit scorecard, and saves the scoring coefficients.
 
-As a result, simpler and more interpretable models are typically preferred for deployment in regulated banking environments, while complex models are often used for benchmarking or as supporting models.
-```
+Bash
+
+python src/model_building.py

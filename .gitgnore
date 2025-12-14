@@ -1,63 +1,53 @@
 # ----------------------------------------------------------------------
+
 # 1. Virtual Environment and Python Artifacts
+
 # ----------------------------------------------------------------------
-# Virtual environment (identified as 'venv' in your traceback)
+
 venv/
 .venv/
 env/
 .env
 
 # Byte-code and compiled files
-*.pyc
-__pycache__/
+
+\*.pyc
+**pycache**/
 
 # Distribution and build artifacts
+
 build/
 dist/
-*.egg-info/
-htmlcov/
-.nox/
+\*.egg-info/
 
 # ----------------------------------------------------------------------
-# 2. Data Science and Large Files
+
+# 2. Data Files and Model Artifacts (Crucial Exclusion)
+
 # ----------------------------------------------------------------------
-# DO NOT COMMIT RAW DATA. Keep it local for security and size reasons.
-# The 'data' folder should only contain small, sample files if necessary.
+
+# Exclude the entire data folder and any large output files
+
 data/
-# Exception: If you ONLY want to ignore the large files, use this instead:
-# *.csv
-# *.xlsx
-# *.h5
 
-# Large output files from feature engineering
-rfms_features_with_proxy.csv
-rfms_woe_transformed_data.csv
+# Exclude all log files
 
-# Logs, metrics, and large outputs
-*.log
-*.sqlite
-.ipynb_checkpoints/
+\*.log
+
+# Exclude all intermediate files and model saves
+
+_.csv
+_.pkl
+_.joblib
+_.h5
 
 # ----------------------------------------------------------------------
-# 3. Model Artifacts (Handle with care - only ignore if using cloud storage)
-# ----------------------------------------------------------------------
-# Model files (e.g., if you saved the final model using pickle)
-*.pkl
-*.joblib
-*.h5
 
-# Scorecard related files
-# The WoE lookup and coefficients files are SMALL and CRITICAL for deployment.
-# You might want to COMMIT these for version control, but excluding them is safer.
-# If you DO NOT want to commit them, uncomment the following:
-# models/woe_lookup_table.csv
-# models/scorecard_coefficients.csv
-# credit_scorecard_model.pkl
+# 3. Operating System and IDE Files
 
 # ----------------------------------------------------------------------
-# 4. Operating System and IDE Files
-# ----------------------------------------------------------------------
-.DS_Store             # macOS
-thumbs.db             # Windows
-.vscode/              # Visual Studio Code
-.idea/                # PyCharm/IntelliJ
+
+.DS_Store # macOS
+thumbs.db # Windows
+.vscode/ # Visual Studio Code
+.idea/ # PyCharm/IntelliJ
