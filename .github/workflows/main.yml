@@ -1,0 +1,58 @@
+- name: Set up Python 3.10
+  uses: actions/setup-python@v5
+  with:
+    python-version: "3.10"
+
+- name: Install dependencies
+  run: |
+    pip install --upgrade pip
+    # Install all project dependencies (including scikit-learn, mlflow, etc.)
+    pip install -r requirements.txt
+    # Install testing framework
+    pip install pytest
+
+- name: Run Unit Tests
+  # We run tests from the project root to ensure module imports (like 'model_pipeline') work correctly
+  run: |
+    pytest src/tests/test_model.py
+
+- name: Simulate Model Training and Artifact Generation
+  # This step ensures that the model pipeline runs and generates the necessary 'best_model_pipeline.pkl' artifact.
+  # This is crucial for the subsequent Docker build step.
+  run: python src/model_pipeline.py
+
+- name: Upload Model Artifact for CD Stage
+  uses: actions/upload-artifact@v4
+  with:
+    name: model-artifact
+    path: models/best_model_pipeline.pkl
+
+- name: Download Model Artifact
+  uses: actions/download-artifact@v4
+  with:
+    name: model-artifact
+    path: models/
+
+- name: Set up Docker Buildx
+  uses: docker/setup-buildx-action@v3
+
+- name: Docker Login (Simulated)
+  # In a real environment, you would log in to a registry (e.g., GHCR, Docker Hub)
+  run: echo "Simulating login to container registry..."
+
+- name: Build and Push Docker Image (Simulated)
+  id: docker_build
+  uses: docker/build-push-action@v5
+  with:
+    context: .
+    push: false # Set to true in a real deployment
+    tags: credit-risk-api:latest
+    cache-from: type=gha
+    cache-to: type=gha,mode=max
+
+- name: Simulate Deployment to Production
+  # Replace this with actual deployment commands (e.g., kubectl, Terraform, cloud run commands)
+  run: |
+    echo "Image credit-risk-api:latest successfully built."
+    echo "Simulating deployment to production environment..."
+    echo "Deployment successful."
