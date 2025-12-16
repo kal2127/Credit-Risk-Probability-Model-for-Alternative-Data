@@ -1,0 +1,6 @@
+Feature,Coefficient
+Recency_WoE,-1.1575258364179841
+Frequency_WoE,-1.2742334721081454
+Monetary_Value_WoE,-1.7751404742111376
+Std_Deviation_WoE,1.4163588463885708
+Intercept,-0.1331418290905653
